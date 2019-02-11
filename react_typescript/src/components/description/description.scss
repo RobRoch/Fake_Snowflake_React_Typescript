@@ -1,0 +1,16 @@
+.description-tab {
+  white-space: pre-line;
+}
+.nav-item {
+  &:not(:first-of-type) {
+    margin-top: 5px;
+  }
+  .nav-link {
+    color: $orange;
+    &:hover,
+    &.active {
+      color: $white-text;
+      background-color: $orange;
+    }
+  }
+}

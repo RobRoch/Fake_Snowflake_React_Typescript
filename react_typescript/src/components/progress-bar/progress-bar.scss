@@ -1,0 +1,3 @@
+.progress-bar-part {
+  @include iterateColors($color-array);
+}

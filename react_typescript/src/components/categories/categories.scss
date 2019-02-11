@@ -1,0 +1,3 @@
+.categories-badge {
+  @include iterateColors($color-array);
+}

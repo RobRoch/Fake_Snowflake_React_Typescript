@@ -1,0 +1,11 @@
+@mixin iterateColors($color-array) {
+  &:first-of-type {
+    background-color: nth($color-array, 1);
+  }
+  &:nth-of-type(2) {
+    background-color: nth($color-array, 2);
+  }
+  &:nth-of-type(3) {
+    background-color: nth($color-array, 3);
+  }
+}
