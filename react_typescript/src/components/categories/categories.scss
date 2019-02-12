@@ -1,3 +1,43 @@
 .categories-badge {
-  @include iterateColors($color-array);
+  padding: 1em 4em;
+  margin: 0.5em;
+}
+
+.milestone-badge {
+  font-size: 60%;
+  white-space: nowrap;
+  margin: 0.4em;
+  padding: 0.2em;
+  border-radius: $button-border-radius;
+  // width: 4em;
+  // height: 4em;
+
+  &-A {
+    background: map-get($color-array, A);
+  }
+  &-B {
+    background: map-get($color-array, B);
+  }
+  &-C {
+    background: map-get($color-array, C);
+  }
+}
+
+.milestone-rating {
+  width: 2em;
+  height: 2em;
+  margin: 1em auto 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 120%;
+  border-radius: $button-border-radius;
+  &-A {
+    background: map-get($color-array, A);
+  }
+  &-B {
+    background: map-get($color-array, B);
+  }
+  &-C {
+    background: map-get($color-array, C);
+  }
 }
