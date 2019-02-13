@@ -6,12 +6,15 @@ import ICategories from "../categories/categories";
 
 import { tracks } from "../../mockAPI/tracks";
 import ILevelingBars from "../leveling-bars/leveling-bars";
+import IUserInformation from "../user-information/user-information";
 
 export interface IDashboardProps {}
 export interface IDashboardState {
   userName: string;
   skills: any[];
   currentTrack: {};
+  userPoints: number;
+  userLevel: string;
 }
 export default class IDashboard extends React.Component<
   IDashboardProps,
@@ -23,7 +26,9 @@ export default class IDashboard extends React.Component<
     this.state = {
       userName: "Random User",
       skills: [],
-      currentTrack: {}
+      currentTrack: {},
+      userPoints: 0,
+      userLevel: ""
     };
   }
 
@@ -81,6 +86,7 @@ export default class IDashboard extends React.Component<
         </Row>
         <Row className="py-4">
           <Col>
+            <IUserInformation />
             <IProgressBar />
           </Col>
           <Col>

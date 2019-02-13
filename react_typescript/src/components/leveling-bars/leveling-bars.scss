@@ -17,6 +17,9 @@
       margin: 5px auto;
       height: 25px;
       transition: $transition-basic;
+      &:hover {
+        background-color: brightness(85%);
+      }
       &:focus,
       &:active {
         box-shadow: none !important;

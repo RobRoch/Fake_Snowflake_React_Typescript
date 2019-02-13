@@ -12,7 +12,7 @@ export default class IDescription extends React.PureComponent<
     super(props);
 
     this.state = {
-      currentMilestone: 0
+      shownLevel: 0
     };
   }
 
@@ -53,17 +53,59 @@ export default class IDescription extends React.PureComponent<
     return tabPanels;
   };
 
+  private handleSelect = (key: number) => {
+    this.setState({
+      shownLevel: key
+    });
+  };
+
+  public componentDidMount() {
+    this.setState({
+      shownLevel: this.props.currentTrack.userLevel
+    });
+  }
+  public componentDidUpdate(prevProps: IDescriptionProps) {
+    console.log("prevProps", prevProps.currentTrack.userLevel);
+    console.log("now", this.props.currentTrack.userLevel);
+    console.log("shown", this.state.shownLevel);
+    if (
+      prevProps.currentTrack.userLevel !== this.props.currentTrack.userLevel
+    ) {
+      console.log("changedState");
+      this.setState({
+        shownLevel: this.props.currentTrack.userLevel
+      });
+    }
+    if (this.props.currentTrack.category !== prevProps.currentTrack.category) {
+      this.setState({
+        shownLevel: this.props.currentTrack.userLevel
+      });
+    }
+    // if (this.props.currentTrack.userLevel !== this.state.shownLevel) {
+    //   this.setState({
+    //     shownLevel: this.props.currentTrack.userLevel
+    //   });
+    // }
+    // this.setState(
+    //   {
+    //     shownLevel: this.props.currentTrack.userLevel
+    //   },
+    //   () => {
+    //     console.log(this.state.shownLevel);
+    //   }
+    // );
+  }
+
   public render() {
     const { currentTrack } = this.props;
-    console.log(currentTrack);
+    const { shownLevel } = this.state;
     const milestoneLength = currentTrack.milestones.length;
     return (
-      <Tab.Container
-        defaultActiveKey={currentTrack.userLevel}
-        activeKey={currentTrack.userLevel}
-      >
+      <Tab.Container activeKey={shownLevel} onSelect={this.handleSelect}>
         <h3>Level description</h3>
-        <p className="current-track-description">{currentTrack.description}</p>
+        <p className="current-track-description">
+          {currentTrack.displayName} - {currentTrack.description}
+        </p>
         <h4>Attributes</h4>
         <Row>
           <Col sm="auto">
