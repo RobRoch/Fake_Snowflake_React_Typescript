@@ -1,0 +1,79 @@
+.level-button-wrapper {
+  position: relative;
+  min-height: 350px;
+  .level-button-group {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    z-index: 1;
+    @for $i from 1 through 16 {
+      &:nth-child(#{$i}) {
+        transform: rotate(calc(#{$i}* 22.5deg)) translateY(40px);
+      }
+    }
+    .level-button {
+      border-width: 3px;
+      position: absolute;
+      margin: 5px auto;
+      height: 25px;
+      transition: $transition-basic;
+      &:focus,
+      &:active {
+        box-shadow: none !important;
+      }
+      &-A {
+        &.active {
+          border-color: map-get($color-array, A);
+          background: map-get($color-array, A);
+        }
+        &:hover,
+        &:focus {
+          background: map-get($color-array, A);
+          border-color: map-get($color-array, A);
+        }
+        border-color: map-get($color-array, A);
+        background: none;
+      }
+      &-B {
+        &.active {
+          border-color: map-get($color-array, B);
+          background: map-get($color-array, B);
+        }
+        &:hover,
+        &:focus {
+          background: map-get($color-array, B);
+          border-color: map-get($color-array, B);
+        }
+        border-color: map-get($color-array, B);
+        background: none;
+      }
+      &-C {
+        &.active {
+          border-color: map-get($color-array, C);
+          background: map-get($color-array, C);
+        }
+        &:hover,
+        &:focus {
+          background: map-get($color-array, C);
+          border-color: map-get($color-array, C);
+        }
+        border-color: map-get($color-array, C);
+        background: none;
+      }
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          border-bottom-left-radius: calc(15px * #{$i});
+          border-bottom-right-radius: calc(15px * #{$i});
+          border-top-left-radius: calc(20px * #{$i});
+          border-top-right-radius: calc(20px * #{$i});
+          top: calc(#{$i} * 30px);
+          transform: rotate(calc(#{$i}* -1.5deg))
+            translateX(calc(#{$i} * -3px));
+          z-index: calc(#{$i} * 5);
+          width: calc(15px + (#{$i} * 12px));
+        }
+      }
+    }
+  }
+}

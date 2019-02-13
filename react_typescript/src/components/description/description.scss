@@ -6,11 +6,33 @@
     margin-top: 5px;
   }
   .nav-link {
-    color: $orange;
+    transition: $transition-basic;
+    color: $white-text;
+    &-A {
+      background: map-get($color-array, A);
+    }
+    &-B {
+      background: map-get($color-array, B);
+    }
+    &-C {
+      background: map-get($color-array, C);
+    }
     &:hover,
     &.active {
-      color: $white-text;
-      background-color: $orange;
+      color: $dark-background;
+      background-color: $white-text;
     }
   }
+}
+.current-track-description {
+  font-size: 140%;
+}
+.current-track-description,
+.milestone-summary {
+  font-weight: 600;
+  font-size: 120%;
+}
+
+.milestone-summary {
+  padding-left: 40px;
 }

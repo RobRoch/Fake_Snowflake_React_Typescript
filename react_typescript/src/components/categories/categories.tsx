@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Badge, Col, Row } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 export interface ICategoriesProps {
-  uniqueCategories: Array<any>;
-  uniqueBadges: Array<any>;
+  skills: Array<any>;
+  currentTrack: any;
+  handleTrackChange(displayName: string): void;
 }
 
 export default class ICategories extends React.Component<
@@ -11,35 +12,45 @@ export default class ICategories extends React.Component<
   any
 > {
   public render() {
-    const { uniqueBadges, uniqueCategories } = this.props;
+    const { skills, handleTrackChange, currentTrack } = this.props;
+    const uniqueCategories = [...new Set(skills.map(skill => skill.category))];
 
     return (
       <>
-        {uniqueCategories.map(category => (
-          <Col className="justify-content-center" key={category}>
-            <div className="text-center">
-              <Badge pill className="categories-badge">
-                {category}
-              </Badge>
-            </div>
+        {uniqueCategories.map(uniqueCategory => (
+          <Col
+            className="justify-content-center text-center"
+            key={uniqueCategory}
+          >
+            <h3> {uniqueCategory}</h3>
             <div className="d-flex justify-content-center">
-              {uniqueBadges.map(badge => {
-                if (badge.cat === category) {
+              {skills.map(skill => {
+                if (skill.category === uniqueCategory) {
                   return (
-                    <div className="text-center" key={badge.name}>
+                    <div className="category-wrapper" key={skill.displayName}>
                       <div
-                        className={`milestone-badge milestone-badge-${
-                          badge.cat
+                        onClick={() => {
+                          handleTrackChange(skill.displayName);
+                        }}
+                        className={`milestone-badge milestone-badge-${uniqueCategory} ${
+                          currentTrack.displayName === skill.displayName
+                            ? "active"
+                            : ""
                         }`}
                       >
-                        {badge.name}
+                        {skill.displayName}
                       </div>
                       <div
-                        className={`milestone-rating milestone-rating-${
-                          badge.cat
-                        } d-flex align-items-center justify-content-center`}
+                        onClick={() => {
+                          handleTrackChange(skill.displayName);
+                        }}
+                        className={`milestone-rating milestone-rating-${uniqueCategory} d-flex align-items-center justify-content-center ${
+                          currentTrack.displayName === skill.displayName
+                            ? "active"
+                            : ""
+                        }`}
                       >
-                        <span>1</span>
+                        <span>{skill.userLevel}</span>
                       </div>
                     </div>
                   );

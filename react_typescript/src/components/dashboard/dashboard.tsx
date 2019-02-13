@@ -5,98 +5,101 @@ import IProgressBar from "../progress-bar/prograss-bar";
 import ICategories from "../categories/categories";
 
 import { tracks } from "../../mockAPI/tracks";
+import ILevelingBars from "../leveling-bars/leveling-bars";
 
-export interface IDashboardProps {
-  title?: string;
-}
+export interface IDashboardProps {}
 export interface IDashboardState {
   userName: string;
   skills: any[];
+  currentTrack: {};
 }
 export default class IDashboard extends React.Component<
   IDashboardProps,
   IDashboardState
 > {
-  public static defaultProps: IDashboardProps = {
-    title: "Fake Snowflake"
-  };
-
   public constructor(props: IDashboardProps) {
     super(props);
 
     this.state = {
       userName: "Random User",
-      skills: []
+      skills: [],
+      currentTrack: {}
     };
   }
 
   private createSkillset = () => {
     let allSkills: any[] = [];
     let tracksKeys = Object.keys(tracks);
+    let skill: { [k: string]: any };
 
     tracksKeys.forEach(key => {
-      console.log(tracks[key]);
-      allSkills.push(tracks[key]);
+      skill = tracks[key];
+      skill.userLevel = 1;
+      allSkills.push(skill);
     });
-
     return allSkills;
   };
 
+  public handleTrackChange = (displayName: string): void => {
+    let newTrack = this.state.skills.find(track => {
+      return track.displayName === displayName;
+    });
+    this.setState({
+      currentTrack: newTrack
+    });
+  };
+
+  public handleLevelChange = (skill: any, level: number): void => {
+    let newSkillsSetup = this.state.skills.map(oldSkill => {
+      if (oldSkill === skill) {
+        skill.userLevel = level;
+        return skill;
+      } else {
+        return oldSkill;
+      }
+    });
+
+    this.setState({
+      skills: newSkillsSetup
+    });
+  };
   public componentWillMount() {
     let allSkills = this.createSkillset();
     this.setState({
-      skills: [...allSkills]
+      skills: [...allSkills],
+      currentTrack: allSkills[0]
     });
   }
 
   public render() {
-    const { title } = this.props;
-    const { userName, skills } = this.state;
-    // const createCategories = () => {
-    //   let categories = [];
-    //   for (let track in allTracks) {
-    //     categories.push(allTracks[track].category);
-    //   }
-
-    //   return categories.filter(
-    //     (value, index, categories) => categories.indexOf(value) === index
-    //   );
-    // };
-
-    // const uniqueCategories = createCategories();
-
-    // const createBadges = () => {
-    //   let badges = [];
-    //   for (let track in allTracks) {
-    //     let name = allTracks[track].displayName;
-    //     let cat = allTracks[track].category;
-    //     badges.push({ name, cat });
-    //   }
-    //   return badges;
-    // };
-
-    // const uniqueBadges = createBadges();
+    const { userName, skills, currentTrack } = this.state;
 
     return (
       <Container className="dashboard">
         <Row>
-          <Col>{title}</Col>
           <Col>{userName}</Col>
         </Row>
         <Row className="py-4">
           <Col>
             <IProgressBar />
           </Col>
+          <Col>
+            <ILevelingBars
+              skills={skills}
+              handleLevelChange={this.handleLevelChange}
+            />
+          </Col>
         </Row>
         <Row className="py-4 ">
           <ICategories
-            uniqueCategories={uniqueCategories}
-            uniqueBadges={uniqueBadges}
+            skills={skills}
+            currentTrack={currentTrack}
+            handleTrackChange={this.handleTrackChange}
           />
         </Row>
         <Row className="py-4">
           <Col>
-            <IDescription />
+            <IDescription currentTrack={currentTrack} />
           </Col>
         </Row>
       </Container>

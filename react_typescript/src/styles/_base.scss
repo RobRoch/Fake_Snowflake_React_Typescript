@@ -1,6 +1,5 @@
 html,
 body {
-  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   #root {
@@ -11,3 +10,4 @@ body {
 }
 
 $button-border-radius: 0.25em;
+$transition-basic: all 0.3s;

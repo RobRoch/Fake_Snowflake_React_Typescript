@@ -4,30 +4,28 @@
 }
 
 .milestone-badge {
-  font-size: 60%;
-  white-space: nowrap;
-  margin: 0.4em;
-  padding: 0.2em;
+  position: absolute;
+  font-size: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3em;
   border-radius: $button-border-radius;
-  // width: 4em;
-  // height: 4em;
+  cursor: pointer;
+  transition: $transition-basic;
 
-  &-A {
-    background: map-get($color-array, A);
-  }
-  &-B {
-    background: map-get($color-array, B);
-  }
-  &-C {
-    background: map-get($color-array, C);
+  &.active,
+  &:hover {
+    background: $white-text;
+    color: $dark-background;
   }
 }
 
 .milestone-rating {
-  width: 2em;
-  height: 2em;
-  margin: 1em auto 0;
   cursor: pointer;
+  width: 2.5em;
+  height: 2.5em;
+  margin: 1.6em 0.4em 0;
+  transition: $transition-basic;
   font-weight: 600;
   font-size: 120%;
   border-radius: $button-border-radius;
@@ -40,4 +38,14 @@
   &-C {
     background: map-get($color-array, C);
   }
+
+  &.active,
+  &:hover {
+    background: $white-text;
+    color: $dark-background;
+  }
+}
+
+.category-wrapper {
+  position: relative;
 }
