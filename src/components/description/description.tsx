@@ -65,13 +65,9 @@ export default class IDescription extends React.PureComponent<
     });
   }
   public componentDidUpdate(prevProps: IDescriptionProps) {
-    console.log("prevProps", prevProps.currentTrack.userLevel);
-    console.log("now", this.props.currentTrack.userLevel);
-    console.log("shown", this.state.shownLevel);
     if (
       prevProps.currentTrack.userLevel !== this.props.currentTrack.userLevel
     ) {
-      console.log("changedState");
       this.setState({
         shownLevel: this.props.currentTrack.userLevel
       });
@@ -81,19 +77,6 @@ export default class IDescription extends React.PureComponent<
         shownLevel: this.props.currentTrack.userLevel
       });
     }
-    // if (this.props.currentTrack.userLevel !== this.state.shownLevel) {
-    //   this.setState({
-    //     shownLevel: this.props.currentTrack.userLevel
-    //   });
-    // }
-    // this.setState(
-    //   {
-    //     shownLevel: this.props.currentTrack.userLevel
-    //   },
-    //   () => {
-    //     console.log(this.state.shownLevel);
-    //   }
-    // );
   }
 
   public render() {

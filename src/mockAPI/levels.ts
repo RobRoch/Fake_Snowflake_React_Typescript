@@ -1,4 +1,5 @@
-export const rank = {
+export const rank: Record<number, string> = {
+  0: "Well..",
   40: "Junior",
   80: "Regular",
   120: "Senior",
@@ -6,7 +7,7 @@ export const rank = {
   200: "Unicorn"
 };
 
-export const points = {
+export const points: Record<number, number> = {
   1: 1,
   2: 3,
   3: 6,
