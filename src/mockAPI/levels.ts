@@ -1,10 +1,11 @@
 export const rank: Record<number, string> = {
-  0: "Well..",
+  0: "Noob",
   40: "Junior",
   80: "Regular",
   120: "Senior",
   160: "Tech leader",
-  200: "Unicorn"
+  200: "Unicorn",
+  241: "Rly?"
 };
 
 export const points: Record<number, number> = {

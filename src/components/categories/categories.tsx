@@ -3,6 +3,7 @@ import { Col } from "react-bootstrap";
 
 export interface ICategoriesProps {
   skills: Array<any>;
+  uniqueCategories: any;
   currentTrack: any;
   handleTrackChange(displayName: string): void;
 }
@@ -12,12 +13,16 @@ export default class ICategories extends React.Component<
   any
 > {
   public render() {
-    const { skills, handleTrackChange, currentTrack } = this.props;
-    const uniqueCategories = [...new Set(skills.map(skill => skill.category))];
+    const {
+      skills,
+      handleTrackChange,
+      currentTrack,
+      uniqueCategories
+    } = this.props;
 
     return (
       <>
-        {uniqueCategories.map(uniqueCategory => (
+        {uniqueCategories.map((uniqueCategory: any) => (
           <Col
             className="justify-content-center text-center"
             key={uniqueCategory}

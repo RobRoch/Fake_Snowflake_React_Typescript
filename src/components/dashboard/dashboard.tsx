@@ -10,9 +10,15 @@ import IUserInformation from "../user-information/user-information";
 
 export interface IDashboardProps {}
 export interface IDashboardState {
-  user: {};
+  user: {
+    name: string;
+    points: number;
+    rank: string;
+    nextLevelPoints: number;
+  };
   skills: any[];
   currentTrack: {};
+  progressBar: {};
 }
 export default class IDashboard extends React.Component<
   IDashboardProps,
@@ -29,7 +35,8 @@ export default class IDashboard extends React.Component<
         nextLevelPoints: 0
       },
       skills: [],
-      currentTrack: {}
+      currentTrack: {},
+      progressBar: {}
     };
   }
 
@@ -43,16 +50,23 @@ export default class IDashboard extends React.Component<
     }
     return 0;
   }
+
   private getNextLevelPoints(array: any, key: any): number {
     let keys = Object.keys(array);
     let index = keys.indexOf(key.toString());
+
     return parseInt(keys[index + 1]);
   }
-  private setUser = () => {
+  private countUserPoints = () => {
+    this.setProgressBarPoints();
     let userPoints = 0;
     this.state.skills.map(skill => {
       userPoints += points[skill.userLevel];
     });
+    return userPoints;
+  };
+  private updateUser = () => {
+    let userPoints = this.countUserPoints();
     let userRankKey = this.getClosestKey(rank, userPoints) || 0;
     let userNextLevelPoints = this.getNextLevelPoints(rank, userRankKey);
     this.setState({
@@ -72,12 +86,28 @@ export default class IDashboard extends React.Component<
 
     tracksKeys.forEach(key => {
       skill = tracks[key];
-      skill.userLevel = 3;
+      skill.userLevel = 1;
       allSkills.push(skill);
     });
     return allSkills;
   };
-
+  private setProgressBarPoints = () => {
+    let newProgressBar: any = {};
+    let uniqueCategories = [
+      ...new Set(this.state.skills.map(skill => skill.category))
+    ];
+    this.state.skills.map(skill => {
+      uniqueCategories.map(cat => {
+        if (skill.category === cat) {
+          newProgressBar[cat] =
+            (newProgressBar[cat] || 0) + points[skill.userLevel];
+        }
+      });
+    });
+    this.setState({
+      progressBar: newProgressBar
+    });
+  };
   public handleTrackChange = (displayName: string): void => {
     let newTrack = this.state.skills.find(track => {
       return track.displayName === displayName;
@@ -96,6 +126,7 @@ export default class IDashboard extends React.Component<
         return oldSkill;
       }
     });
+    this.updateUser();
     this.setState({
       skills: newSkillsSetup
     });
@@ -109,20 +140,23 @@ export default class IDashboard extends React.Component<
         currentTrack: allSkills[0]
       },
       () => {
-        this.setUser();
+        this.updateUser();
       }
     );
   }
 
   public render() {
-    const { user, skills, currentTrack } = this.state;
-
+    const { user, skills, currentTrack, progressBar } = this.state;
+    const uniqueCategories = [...new Set(skills.map(skill => skill.category))];
     return (
       <Container className="dashboard">
         <Row className="py-4">
           <Col>
             <IUserInformation user={user} />
-            <IProgressBar />
+            <IProgressBar
+              nextLevel={user.nextLevelPoints}
+              progressBar={progressBar}
+            />
           </Col>
           <Col>
             <ILevelingBars
@@ -135,6 +169,7 @@ export default class IDashboard extends React.Component<
           <ICategories
             skills={skills}
             currentTrack={currentTrack}
+            uniqueCategories={uniqueCategories}
             handleTrackChange={this.handleTrackChange}
           />
         </Row>

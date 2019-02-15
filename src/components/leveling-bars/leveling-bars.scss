@@ -1,10 +1,10 @@
 .level-button-wrapper {
   position: relative;
-  min-height: 350px;
+  min-height: 400px;
   .level-button-group {
     position: absolute;
     left: 50%;
-    top: 30%;
+    top: 45%;
     z-index: 1;
     @for $i from 1 through 16 {
       &:nth-child(#{$i}) {
@@ -17,9 +17,7 @@
       margin: 5px auto;
       height: 25px;
       transition: $transition-basic;
-      &:hover {
-        background-color: brightness(85%);
-      }
+
       &:focus,
       &:active {
         box-shadow: none !important;
