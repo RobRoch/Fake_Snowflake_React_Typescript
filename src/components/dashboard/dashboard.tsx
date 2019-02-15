@@ -16,7 +16,7 @@ export interface IDashboardState {
     rank: string;
     nextLevelPoints: number;
   };
-  skills: any[];
+  tracks: any[];
   currentTrack: {};
   progressBar: {};
 }
@@ -34,7 +34,7 @@ export default class IDashboard extends React.Component<
         rank: "",
         nextLevelPoints: 0
       },
-      skills: [],
+      tracks: [],
       currentTrack: {},
       progressBar: {}
     };
@@ -60,8 +60,8 @@ export default class IDashboard extends React.Component<
   private countUserPoints = () => {
     this.setProgressBarPoints();
     let userPoints = 0;
-    this.state.skills.map(skill => {
-      userPoints += points[skill.userLevel];
+    this.state.tracks.map(track => {
+      userPoints += points[track.userLevel];
     });
     return userPoints;
   };
@@ -94,13 +94,13 @@ export default class IDashboard extends React.Component<
   private setProgressBarPoints = () => {
     let newProgressBar: any = {};
     let uniqueCategories = [
-      ...new Set(this.state.skills.map(skill => skill.category))
+      ...new Set(this.state.tracks.map(track => track.category))
     ];
-    this.state.skills.map(skill => {
+    this.state.tracks.map(track => {
       uniqueCategories.map(cat => {
-        if (skill.category === cat) {
+        if (track.category === cat) {
           newProgressBar[cat] =
-            (newProgressBar[cat] || 0) + points[skill.userLevel];
+            (newProgressBar[cat] || 0) + points[track.userLevel];
         }
       });
     });
@@ -109,7 +109,7 @@ export default class IDashboard extends React.Component<
     });
   };
   public handleTrackChange = (displayName: string): void => {
-    let newTrack = this.state.skills.find(track => {
+    let newTrack = this.state.tracks.find(track => {
       return track.displayName === displayName;
     });
     this.setState({
@@ -117,27 +117,27 @@ export default class IDashboard extends React.Component<
     });
   };
 
-  public handleLevelChange = (skill: any, level: number): void => {
-    let newSkillsSetup = this.state.skills.map(oldSkill => {
-      if (oldSkill === skill) {
-        skill.userLevel = level;
-        return skill;
+  public handleLevelChange = (track: any, level: number): void => {
+    let newTracksSetup = this.state.tracks.map(oldTrack => {
+      if (oldTrack === track) {
+        track.userLevel = level;
+        return track;
       } else {
-        return oldSkill;
+        return oldTrack;
       }
     });
     this.updateUser();
     this.setState({
-      skills: newSkillsSetup
+      tracks: newTracksSetup
     });
   };
 
   public componentWillMount() {
-    let allSkills = this.createSkillset();
+    let allTracks = this.createSkillset();
     this.setState(
       {
-        skills: [...allSkills],
-        currentTrack: allSkills[0]
+        tracks: [...allTracks],
+        currentTrack: allTracks[0]
       },
       () => {
         this.updateUser();
@@ -146,8 +146,8 @@ export default class IDashboard extends React.Component<
   }
 
   public render() {
-    const { user, skills, currentTrack, progressBar } = this.state;
-    const uniqueCategories = [...new Set(skills.map(skill => skill.category))];
+    const { user, tracks, currentTrack, progressBar } = this.state;
+    const uniqueCategories = [...new Set(tracks.map(track => track.category))];
     return (
       <Container className="dashboard">
         <Row className="py-4">
@@ -160,14 +160,14 @@ export default class IDashboard extends React.Component<
           </Col>
           <Col>
             <ILevelingBars
-              skills={skills}
+              skills={tracks}
               handleLevelChange={this.handleLevelChange}
             />
           </Col>
         </Row>
         <Row className="py-4 ">
           <ICategories
-            skills={skills}
+            skills={tracks}
             currentTrack={currentTrack}
             uniqueCategories={uniqueCategories}
             handleTrackChange={this.handleTrackChange}
