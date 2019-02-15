@@ -15,6 +15,7 @@ export interface IDashboardState {
   tracks: ITrack[];
   currentTrack: ITrack;
   progressBar: {};
+  editableLevels: boolean;
 }
 export default class IDashboard extends React.Component<
   IDashboardProps,
@@ -38,7 +39,8 @@ export default class IDashboard extends React.Component<
         milestones: [],
         userLevel: 0
       },
-      progressBar: {}
+      progressBar: {},
+      editableLevels: false
     };
   }
 
@@ -115,7 +117,12 @@ export default class IDashboard extends React.Component<
       progressBar: newProgressBar
     });
   };
-
+  private handleEditlevels = (): void => {
+    console.log(this.state.editableLevels);
+    this.setState({
+      editableLevels: !this.state.editableLevels
+    });
+  };
   public handleTrackChange = (displayName: string): void => {
     let newTrack = this.state.tracks.find(track => {
       return track.displayName === displayName;
@@ -156,14 +163,20 @@ export default class IDashboard extends React.Component<
   }
 
   public render() {
-    const { user, tracks, currentTrack, progressBar } = this.state;
+    const {
+      user,
+      tracks,
+      currentTrack,
+      progressBar,
+      editableLevels
+    } = this.state;
     const uniqueCategories: string[] = [
       ...new Set(tracks.map(track => track.category))
     ];
     return (
       <Container className="dashboard">
         <Row className="py-4">
-          <Col>
+          <Col className="d-flex flex-column justify-content-center">
             <IUserInformation user={user} />
             <IProgressBar
               nextLevel={user.nextLevelPoints}
@@ -172,8 +185,10 @@ export default class IDashboard extends React.Component<
           </Col>
           <Col>
             <ILevelingBars
+              editableLevels={editableLevels}
               tracks={tracks}
               handleLevelChange={this.handleLevelChange}
+              handleEditLevels={this.handleEditlevels}
             />
           </Col>
         </Row>
