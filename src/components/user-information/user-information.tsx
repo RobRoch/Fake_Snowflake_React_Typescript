@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Button, Row, Col } from "react-bootstrap";
+import { IUser } from "../../mockAPI/interfaces";
 export interface IUserInformationProps {
-  user: any;
+  user: IUser;
 }
 
 export default class IUserInformation extends React.Component<

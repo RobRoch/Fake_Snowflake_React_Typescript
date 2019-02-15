@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Tab, Row, Col, Nav } from "react-bootstrap";
+import { ITrack, IMilestone } from "../../mockAPI/interfaces";
 export interface IDescriptionProps {
-  currentTrack: any;
+  currentTrack: ITrack;
 }
 
 export default class IDescription extends React.PureComponent<
@@ -30,9 +31,9 @@ export default class IDescription extends React.PureComponent<
     return nav;
   };
 
-  private createTabPanels = (currentTrack: any) => {
+  private createTabPanels = (currentTrack: ITrack) => {
     let tabPanels = currentTrack.milestones.map(
-      (milestone: any, index: number) => (
+      (milestone: IMilestone, index: number) => (
         <Tab.Pane key={index} className="description-tab" eventKey={index + 1}>
           <p className="milestone-summary">
             Level {index + 1} {milestone.summary}

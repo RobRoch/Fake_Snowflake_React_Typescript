@@ -7,17 +7,13 @@ import { rank, points } from "../../mockAPI/levels";
 import { tracks } from "../../mockAPI/tracks";
 import ILevelingBars from "../leveling-bars/leveling-bars";
 import IUserInformation from "../user-information/user-information";
+import { ITrack, IUser } from "../../mockAPI/interfaces";
 
 export interface IDashboardProps {}
 export interface IDashboardState {
-  user: {
-    name: string;
-    points: number;
-    rank: string;
-    nextLevelPoints: number;
-  };
-  tracks: any[];
-  currentTrack: {};
+  user: IUser;
+  tracks: ITrack[];
+  currentTrack: ITrack;
   progressBar: {};
 }
 export default class IDashboard extends React.Component<
@@ -35,29 +31,38 @@ export default class IDashboard extends React.Component<
         nextLevelPoints: 0
       },
       tracks: [],
-      currentTrack: {},
+      currentTrack: {
+        displayName: "",
+        category: "",
+        description: "",
+        milestones: [],
+        userLevel: 0
+      },
       progressBar: {}
     };
   }
 
-  private getClosestKey(array: any, points: any): number {
+  private getClosestKey(ranks: Record<number, string>, points: number): number {
     let prev = -1;
-    let i;
-    for (i in array) {
-      let n = parseInt(i);
-      if (prev != -1 && points < n) return prev;
-      else prev = n;
+    let rank;
+    for (rank in ranks) {
+      let nRank = parseInt(rank);
+      if (prev != -1 && points < nRank) return prev;
+      else prev = nRank;
     }
     return 0;
   }
 
-  private getNextLevelPoints(array: any, key: any): number {
-    let keys = Object.keys(array);
+  private getNextLevelPoints(
+    ranks: Record<number, string>,
+    key: number
+  ): number {
+    let keys = Object.keys(ranks);
     let index = keys.indexOf(key.toString());
-
     return parseInt(keys[index + 1]);
   }
-  private countUserPoints = () => {
+
+  private countUserPoints = (): number => {
     this.setProgressBarPoints();
     let userPoints = 0;
     this.state.tracks.map(track => {
@@ -65,7 +70,8 @@ export default class IDashboard extends React.Component<
     });
     return userPoints;
   };
-  private updateUser = () => {
+
+  private updateUser = (): void => {
     let userPoints = this.countUserPoints();
     let userRankKey = this.getClosestKey(rank, userPoints) || 0;
     let userNextLevelPoints = this.getNextLevelPoints(rank, userRankKey);
@@ -79,19 +85,20 @@ export default class IDashboard extends React.Component<
     });
   };
 
-  private createSkillset = () => {
-    let allSkills: any[] = [];
+  private createTrackset = (): ITrack[] => {
+    //TODO no idea how ot change type allTracks and newTrack.
+    let allTracks: any[] = [];
     let tracksKeys = Object.keys(tracks);
-    let skill: { [k: string]: any };
-
+    let newTrack: { [k: string]: number };
     tracksKeys.forEach(key => {
-      skill = tracks[key];
-      skill.userLevel = 1;
-      allSkills.push(skill);
+      newTrack = tracks[key];
+      newTrack.userLevel = 1;
+      allTracks.push(newTrack);
     });
-    return allSkills;
+    return allTracks;
   };
-  private setProgressBarPoints = () => {
+
+  private setProgressBarPoints = (): void => {
     let newProgressBar: any = {};
     let uniqueCategories = [
       ...new Set(this.state.tracks.map(track => track.category))
@@ -108,16 +115,19 @@ export default class IDashboard extends React.Component<
       progressBar: newProgressBar
     });
   };
+
   public handleTrackChange = (displayName: string): void => {
     let newTrack = this.state.tracks.find(track => {
       return track.displayName === displayName;
     });
-    this.setState({
-      currentTrack: newTrack
-    });
+    newTrack
+      ? this.setState({
+          currentTrack: newTrack
+        })
+      : console.log(`This track doesn't exist in db`);
   };
 
-  public handleLevelChange = (track: any, level: number): void => {
+  public handleLevelChange = (track: ITrack, level: number): void => {
     let newTracksSetup = this.state.tracks.map(oldTrack => {
       if (oldTrack === track) {
         track.userLevel = level;
@@ -133,7 +143,7 @@ export default class IDashboard extends React.Component<
   };
 
   public componentWillMount() {
-    let allTracks = this.createSkillset();
+    let allTracks = this.createTrackset();
     this.setState(
       {
         tracks: [...allTracks],
@@ -147,7 +157,9 @@ export default class IDashboard extends React.Component<
 
   public render() {
     const { user, tracks, currentTrack, progressBar } = this.state;
-    const uniqueCategories = [...new Set(tracks.map(track => track.category))];
+    const uniqueCategories: string[] = [
+      ...new Set(tracks.map(track => track.category))
+    ];
     return (
       <Container className="dashboard">
         <Row className="py-4">
@@ -160,14 +172,14 @@ export default class IDashboard extends React.Component<
           </Col>
           <Col>
             <ILevelingBars
-              skills={tracks}
+              tracks={tracks}
               handleLevelChange={this.handleLevelChange}
             />
           </Col>
         </Row>
         <Row className="py-4 ">
           <ICategories
-            skills={tracks}
+            tracks={tracks}
             currentTrack={currentTrack}
             uniqueCategories={uniqueCategories}
             handleTrackChange={this.handleTrackChange}

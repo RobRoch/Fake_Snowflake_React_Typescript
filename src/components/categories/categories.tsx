@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Col } from "react-bootstrap";
+import { ITrack } from "../../mockAPI/interfaces";
 
 export interface ICategoriesProps {
-  skills: Array<any>;
-  uniqueCategories: any;
-  currentTrack: any;
+  tracks: ITrack[];
+  uniqueCategories: string[];
+  currentTrack: ITrack;
   handleTrackChange(displayName: string): void;
 }
 
@@ -14,7 +15,7 @@ export default class ICategories extends React.Component<
 > {
   public render() {
     const {
-      skills,
+      tracks,
       handleTrackChange,
       currentTrack,
       uniqueCategories
@@ -22,40 +23,40 @@ export default class ICategories extends React.Component<
 
     return (
       <>
-        {uniqueCategories.map((uniqueCategory: any) => (
+        {uniqueCategories.map((uniqueCategory: string) => (
           <Col
             className="justify-content-center text-center"
             key={uniqueCategory}
           >
             <h3> {uniqueCategory}</h3>
             <div className="d-flex justify-content-center">
-              {skills.map(skill => {
-                if (skill.category === uniqueCategory) {
+              {tracks.map(track => {
+                if (track.category === uniqueCategory) {
                   return (
-                    <div className="category-wrapper" key={skill.displayName}>
+                    <div className="category-wrapper" key={track.displayName}>
                       <div
                         onClick={() => {
-                          handleTrackChange(skill.displayName);
+                          handleTrackChange(track.displayName);
                         }}
                         className={`milestone-badge milestone-badge-${uniqueCategory} ${
-                          currentTrack.displayName === skill.displayName
+                          currentTrack.displayName === track.displayName
                             ? "active"
                             : ""
                         }`}
                       >
-                        {skill.displayName}
+                        {track.displayName}
                       </div>
                       <div
                         onClick={() => {
-                          handleTrackChange(skill.displayName);
+                          handleTrackChange(track.displayName);
                         }}
                         className={`milestone-rating milestone-rating-${uniqueCategory} d-flex align-items-center justify-content-center ${
-                          currentTrack.displayName === skill.displayName
+                          currentTrack.displayName === track.displayName
                             ? "active"
                             : ""
                         }`}
                       >
-                        <span>{skill.userLevel}</span>
+                        <span>{track.userLevel}</span>
                       </div>
                     </div>
                   );

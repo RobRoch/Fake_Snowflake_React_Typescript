@@ -1,8 +1,9 @@
-export interface ISkill {
+export interface ITrack {
   displayName: string;
   category: string;
   description: string;
   milestones: IMilestone[];
+  userLevel: number;
 }
 
 export interface IMilestone {
@@ -17,11 +18,7 @@ export interface IUser {
   rank: string;
   nextLevelPoints: number;
 }
-export interface ITrack extends ISkill {
-  userLevel: number;
-}
-export interface ICurrentTrack extends IMilestone {
-  userLevel: number;
-}
+
+//TODO IProgressBar, key are categories (it depends on unique categories in ITrack[]) values are count onMount.
 
 export interface IProgressBar {}
